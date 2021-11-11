@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.database.Cursor;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -48,15 +49,44 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "" + text, Toast.LENGTH_SHORT).show();
             }
         });
+
+        Button addButton = findViewById(R.id.Add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                newProduct(view);
+            }
+        });
+        Button findButton = findViewById(R.id.Find);
+        findButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lookupProduct(view);
+            }
+        });
+        Button removeButton = findViewById(R.id.Remove);
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeProduct(view);
+            }
+        });
+
+
+
     }
+
+
+
 
     public void newProduct(View view) {
         MyDBHandler dbHandler = new MyDBHandler(this);
         double price = Double.parseDouble(priceBox.getText().toString());
         Product product = dbHandler.findProduct(productBox.getText().toString());
         dbHandler.addProduct(product);
-        productBox.setText("");
-        priceBox.setText("");
+        productBox.setText(""); // Get ID of the text of
+        priceBox.setText(""); // Get ID of the text of
         listItem.clear();
         viewData();
     }
@@ -85,18 +115,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-        private void viewData() {
-            MyDBHandler dbHandler = new MyDBHandler(this);
-            Cursor cursor = dbHandler.viewData();
-            if(cursor.getCount() == 0) {
-                Toast.makeText(this, "Not data to show", Toast.LENGTH_SHORT).show();
+    private void viewData() {
+        MyDBHandler dbHandler = new MyDBHandler(this);
+        Cursor cursor = dbHandler.viewData();
+        if(cursor.getCount() == 0) {
+            Toast.makeText(this, "Not data to show", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            while(cursor.moveToNext()){
+                listItem.add(cursor.getString(1));
             }
-             else {
-                while(cursor.moveToNext()){
-                    listItem.add(cursor.getString(1));
-                }
-                adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
-                productlist.setAdapter(adapter);
-            }
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listItem);
+            productlist.setAdapter(adapter);
         }
     }
+}
