@@ -71,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 removeProduct(view);
             }
         });
-
-
-
     }
 
 
@@ -81,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void newProduct(View view) {
         MyDBHandler dbHandler = new MyDBHandler(this);
+        String name = productBox.getText().toString();
         double price = Double.parseDouble(priceBox.getText().toString());
-        Product product = dbHandler.findProduct(productBox.getText().toString());
+        Product product = new Product(name, price);
         dbHandler.addProduct(product);
         productBox.setText(""); // Get ID of the text of
         priceBox.setText(""); // Get ID of the text of
