@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         dbHandler.addProduct(product);
         productBox.setText(""); // Get ID of the text of
         priceBox.setText(""); // Get ID of the text of
-        listItem.clear();
         viewData();
     }
     public void lookupProduct (View view){
@@ -115,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private void viewData() {
         MyDBHandler dbHandler = new MyDBHandler(this);
         Cursor cursor = dbHandler.viewData();
+        productlist.setAdapter(null);
         if(cursor.getCount() == 0) {
             Toast.makeText(this, "Not data to show", Toast.LENGTH_SHORT).show();
         }
