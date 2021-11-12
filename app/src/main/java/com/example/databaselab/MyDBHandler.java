@@ -22,7 +22,11 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        String CREATE_PRODUCTS_TABLE = "CREATE TABLE " + TABLE_PRODUCTS + "(" + COLUMN_ID + " INTEGER PRIMARY KEY, " + COLUMN_PRODUCTNAME + " TEXT, " + COLUMN_PRICE + " DOUBLE" + ")";
+        String CREATE_PRODUCTS_TABLE = "CREATE TABLE " + TABLE_PRODUCTS
+                + "(" + COLUMN_ID + " INTEGER PRIMARY KEY,"
+                + COLUMN_PRODUCTNAME + " TEXT,"
+                + COLUMN_PRICE + " DOUBLE"
+                + ")";
         db.execSQL(CREATE_PRODUCTS_TABLE);
     }
     @Override
@@ -32,15 +36,17 @@ public class MyDBHandler extends SQLiteOpenHelper{
     }
 
     public void addProduct (Product product){
+        SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_PRODUCTNAME, product.getProductName());
         values.put(COLUMN_PRICE, product.getPrice());
-        SQLiteDatabase db = this.getWritableDatabase();
+
         db.insert(TABLE_PRODUCTS, null, values);
         db.close();
     }
     public Product findProduct(String productname){
-        String query = "Select * FROM " + TABLE_PRODUCTS + "Where " + COLUMN_PRODUCTNAME + " =\"" + productname + "\"";
+        String query = "Select * FROM " + TABLE_PRODUCTS + " Where " + COLUMN_PRODUCTNAME + " =\"" + productname + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         Product product = new Product();
@@ -48,7 +54,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
             product.setID(Integer.parseInt(cursor.getString(0)));
             product.setProductName(cursor.getString(1));
             product.setPrice(Integer.parseInt(cursor.getString(2)));
-cursor.close();
+            cursor.close();
         }
         else
         {
